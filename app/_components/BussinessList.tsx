@@ -43,6 +43,12 @@ function BussinessList({ businessList, title }: BusinessListProps) {
                 {/* Replace with actual image once available */}
                 <div className="h-[150px] md:h-[200px] bg-purple-100 rounded-t-lg flex items-center justify-center">
                   <h2 className="text-gray-500 text-sm">Image Placeholder</h2>
+                  {/* <Image src={}
+            alt={business.name}
+            width={500}
+            height={200}
+            className='h-[150px] md:h-[200px] object-cover rounded-lg'
+            /> */}
                 </div>
                 <div className="flex flex-col items-baseline p-3 gap-1">
                   <h2 className="p-1 bg-purple-200 rounded-full text-primary px-2 text-[12px]">

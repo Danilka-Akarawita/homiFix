@@ -3,8 +3,10 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const Header: React.FC = () => {
+  const {user,isSignedIn}=useUser();
   return (
     <div className="p-5 shadow-sm flex justify-between items-center">
       <div className="flex items-center gap-8">
@@ -31,7 +33,11 @@ const Header: React.FC = () => {
         </div>
       </div>
       {/* Right section: Button */}
-      <Button>Get Started</Button>
+      {isSignedIn?
+      <UserButton/>:
+      <Link href='/sign-in'>
+      <Button >Get Started</Button>
+      </Link>}
     </div>
   );
 };
