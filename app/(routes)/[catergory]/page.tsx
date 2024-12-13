@@ -1,9 +1,19 @@
-import React from 'react'
+"use client";
+import React, { useEffect } from "react";
+type Params = {
+  categoryName: string;
+};
 
-function page() {
-  return (
-    <div>page</div>
-  )
+interface BusinessByCategoryProps {
+  params: Params;
 }
 
-export default page
+function BusinessByCatergory({ params }: BusinessByCategoryProps) {
+  useEffect(() => {
+    console.log(params);
+  }, [params]);
+
+  return <div>BusinessByCatergory</div>;
+}
+
+export default BusinessByCatergory;

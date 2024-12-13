@@ -10,7 +10,7 @@ function Layout({ children }: LayoutProps) {
     <div>
       <div className="grid grid-cols-4 mt-8">
         <div className=""><CatergorySideBar/></div>
-        <div className="col-span-3 bg-red-100">{children}</div>
+        <div className="col-span-3 ">{children}</div>
       </div>
     </div>
   );

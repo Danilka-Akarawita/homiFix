@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { List } from "lucide-react";
+import Link from "next/link";
 export type Catergory = {
   id: number;
   name: string;
@@ -33,7 +35,7 @@ function CatergorySideBar() {
       <div className="grid grid-cols-1 gap-4">
         {catergoryList.length > 0 ? (
           catergoryList.map((catergory, index) => (
-            <div
+            <Link href={'/'+catergory.name}
               key={index} // Use `id` if available, fallback to index
               className="flex p-3 border  mb-3 rounded-lg items-center cursor-pointer md:mr-10 hover:bg-purple-50 hover:text-primary hover:border-primary hover:scale-110 transition-all ease-in-out"
             >
@@ -44,7 +46,7 @@ function CatergorySideBar() {
                 height={30}
               />
               <h2 className="text-primary">{catergory.name}</h2>
-            </div>
+            </Link>
           ))
         ) : (
           <p className="text-gray-500">No categories available.</p>
