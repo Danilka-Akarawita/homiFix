@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { List } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 export type Catergory = {
   id: number;
   name: string;
@@ -11,6 +12,8 @@ export type Catergory = {
 
 function CatergorySideBar() {
   const [catergoryList, setCatergoryList] = useState<Catergory[]>([]);
+  const [categoryName, setCategoryName] = useState("");
+  const params = usePathname();
 
   useEffect(() => {
     const fetchCategoryList = async () => {
@@ -28,16 +31,26 @@ function CatergorySideBar() {
     };
 
     fetchCategoryList();
-  }, []);
+
+    setCategoryName(params.split("/")[1]);
+  }, [params]);
+
+  //console.log("macn",params.split("/")[1]);
   return (
     <div>
       <h2 className="font-bold mb-3 text-lg text-primary">Categories</h2>
       <div className="grid grid-cols-1 gap-4">
         {catergoryList.length > 0 ? (
           catergoryList.map((catergory, index) => (
-            <Link href={'/'+catergory.name}
+            <Link
+              href={"/" + catergory.name}
               key={index} // Use `id` if available, fallback to index
-              className="flex p-3 border  mb-3 rounded-lg items-center cursor-pointer md:mr-10 hover:bg-purple-50 hover:text-primary hover:border-primary hover:scale-110 transition-all ease-in-out"
+              className={`flex p-3 border  mb-3 rounded-lg items-center cursor-pointer md:mr-10 hover:bg-purple-50 hover:text-primary
+               hover:border-primary 
+               hover:scale-110 transition-all ease-in-out ${
+                 categoryName == catergory.name &&
+                 "border-primary shadow-md bg-purple-100"
+               }`}
             >
               <Image
                 src={`/${catergory.icon}`}

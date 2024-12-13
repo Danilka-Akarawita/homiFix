@@ -9,7 +9,7 @@ function Layout({ children }: LayoutProps) {
   return (
     <div>
       <div className="grid grid-cols-4 mt-8">
-        <div className=""><CatergorySideBar/></div>
+        <div className="hidden md:block"><CatergorySideBar/></div>
         <div className="col-span-3 ">{children}</div>
       </div>
     </div>
