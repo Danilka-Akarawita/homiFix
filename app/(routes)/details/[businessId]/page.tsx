@@ -32,7 +32,7 @@ function BusinessDetails() {
       }
       const data = await response.json();
       setBusinessList(data[0]);
-      console.log("data:", data);
+     
     } catch (error) {
       console.error("Error fetching business list:", error);
     }
@@ -44,9 +44,9 @@ function BusinessDetails() {
   return (
     <div className="py-8 md:py-20 px-10 md:px-36">
       {businessList && <BusinessInfo business={businessList} />}
-      <div className="grid grid-cols-4 mt-8">
-        <div className="col-span-3"> {businessList && <BusinessDescription business={businessList} />}</div>
-        <div className="hidden md:block"> {businessList && <SuggestedBusinessLists business={businessList} />}</div>
+      <div className="grid grid-cols-3 mt-10">
+        <div className="col-span-3 md:col-span-2 order-last md:order-first"> {businessList && <BusinessDescription business={businessList} />}</div>
+        <div > {businessList && <SuggestedBusinessLists business={businessList} />}</div>
       </div>
     </div>
   );

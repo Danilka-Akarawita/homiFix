@@ -23,6 +23,7 @@ interface BusinessListProps {
 }
 
 function BusinessInfo({ business }: BusinessListProps) {
+    console.log("first,",business);
   return (
     <div className="md:flex items-center ">
       <Image
@@ -35,7 +36,7 @@ function BusinessInfo({ business }: BusinessListProps) {
       <div className="md:flex justify-between items-center w-full">
         <div className="flex flex-col items-baseline m-2 gap-3">
           <h2 className="text-primary bg-purple-100 rounded-full  px-2 text-lg">
-            {business.name}
+            {business.category.name}
           </h2>
           <h2 className="text-[40px] font-bold ">{business.name}</h2>
           <h2 className="flex gap-2 text-lg text-gray-500 ">
