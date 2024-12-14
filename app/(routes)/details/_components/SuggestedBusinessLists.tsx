@@ -3,6 +3,7 @@ import { Notebook, NotebookPen } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import BookingSection from "./BookingSection";
 
 export type BusinessList = {
   id: number;
@@ -44,10 +45,12 @@ function SuggestedBusinessLists({ business }: BusinessListProps) {
   }, [business]);
   return (
     <div className=" md:pl-10 ">
-      <Button className="flex gap-2  ">
-        <NotebookPen />
-        Book Appointment
-      </Button>
+      <BookingSection>
+        <Button className="flex gap-2  ">
+          <NotebookPen />
+          Book Appointment
+        </Button>
+      </BookingSection>
       <div className="hidden md:block">
         <h2 className="font-bold text-lg mt-3 hidden md:block">
           Similar Business

@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BusinessInfo from "../_components/BusinessInfo/page";
+import BusinessInfo from "../_components/BusinessInfo";
 import { usePathname } from "next/navigation";
-import BusinessDescription from "../_components/BusinessDescription/page";
-import SuggestedBusinessLists from "../_components/SuggestedBusinessLists/page";
+import BusinessDescription from "../_components/BusinessDescription";
+import SuggestedBusinessLists from "../_components/SuggestedBusinessLists";
 export type Business = {
   id: number;
   name: string;
