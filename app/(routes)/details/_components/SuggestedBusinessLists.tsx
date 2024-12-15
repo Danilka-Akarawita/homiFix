@@ -59,7 +59,7 @@ function SuggestedBusinessLists({ business }: BusinessListProps) {
           {SimilarBusinessList?.map((similarBusiness, index) => (
             <Link
               key={index}
-              href={`/details/${similarBusiness.id}`}
+              href={`/details/1`}
               className="flex gap-2 mb-2 mt-3 hover:border rounded-lg border-primary p-2 cursor-pointer hover:shadow-sm"
             >
               <Image
