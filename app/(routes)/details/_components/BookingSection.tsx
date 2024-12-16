@@ -11,16 +11,36 @@ import {
 } from "@/components/ui/sheet";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+
+export type BusinessList = {
+  id: number;
+  name: string;
+  address: string;
+  contactPerson: string;
+  about: string;
+  categoryId: number;
+  category: {
+    id: number;
+    name: string;
+    icon: string;
+  };
+  email: string;
+};
+
+
 
 interface BookingSectionProps {
   children: ReactNode;
+  business: BusinessList;
 }
 interface TimeSlot {
   time: string;
 }
 
-function BookingSection({ children }: BookingSectionProps) {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+function BookingSection({ children,business }: BookingSectionProps) {
+  const [bookedDate, setDate] = React.useState<Date | undefined>(new Date());
   const [timeSlot, setTimeSlot] = React.useState<TimeSlot[]>([]);
   const [selectedTime, setSelectedTime] = React.useState<string>();
 
@@ -50,9 +70,36 @@ function BookingSection({ children }: BookingSectionProps) {
 
   useEffect(() => {
     getTime();
+    
   }, []);
 
-  const saveBooking = () => {};
+  const saveBooking =  async () =>  {
+    const objBooked = {
+      "username": business.contactPerson,
+      "userEmail": business.email,
+      "businessId": business.id,
+      "businessStatus": "booked",
+      "date": bookedDate,
+      "time": selectedTime
+    };
+
+    const response = await fetch(`/api/bookings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(objBooked),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create expense");
+    }
+    
+
+    toast("booking  Created!");
+  };
+
+
 
   return (
     <div>
@@ -67,7 +114,7 @@ function BookingSection({ children }: BookingSectionProps) {
                 <h2 className="font-bold mt-2">Select Date</h2>
                 <Calendar
                   mode="single"
-                  selected={date}
+                  selected={bookedDate}
                   onSelect={setDate}
                   className="rounded-md border"
                 />
@@ -94,7 +141,7 @@ function BookingSection({ children }: BookingSectionProps) {
               <div className=" flex gap-5 mt-2">
                 <Button
                   onClick={() => saveBooking()}
-                  disabled={!(selectedTime && date)}
+                  disabled={!(selectedTime && bookedDate)}
                 >
                   Book
                 </Button>

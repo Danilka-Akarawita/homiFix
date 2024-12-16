@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "./_components/Header";
 import { Outfit } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Outfit({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <div className="mx-4 md:mx-16">
+          <Toaster />
             <Header /> {children}
           </div>
         </body>

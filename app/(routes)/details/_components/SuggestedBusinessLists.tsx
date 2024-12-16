@@ -45,7 +45,7 @@ function SuggestedBusinessLists({ business }: BusinessListProps) {
   }, [business]);
   return (
     <div className=" md:pl-10 ">
-      <BookingSection>
+      <BookingSection business={business}>
         <Button className="flex gap-2  ">
           <NotebookPen />
           Book Appointment

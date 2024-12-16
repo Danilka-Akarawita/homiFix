@@ -30,7 +30,8 @@ model Booking {
   id             Int          @id @default(autoincrement())
   username       String
   userEmail      String
-  dateTime       DateTime
+  date           DateTime
+  time           String
   businessListId Int
   businessList   BusinessList @relation(fields: [businessListId], references: [id])
   bookingStatus  String
