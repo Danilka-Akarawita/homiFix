@@ -110,6 +110,13 @@ function BookingSection({ children, business }: BookingSectionProps) {
     setDate(undefined);
   };
 
+  const isValidDate = (date: Date | undefined): boolean => {
+    if (!date) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set today's time to midnight for comparison
+    return date >= today; // Date must be today or in the future
+  };
+
   const isBooked = (time: string) => {
     const selectedDateStr = bookedDate?.toISOString().slice(0, 10); // Format: YYYY-MM-DD
 
@@ -143,6 +150,9 @@ function BookingSection({ children, business }: BookingSectionProps) {
                   onSelect={setDate}
                   className="rounded-md border"
                 />
+                {!isValidDate(bookedDate) && (
+                  <p className="text-red-500">Booking date must be today or in the future.</p>
+                )}
               </div>
               <h2 className="font-bold m-3">Select Time</h2>
               <div className="grid grid-cols-3 gap-2">
@@ -154,7 +164,7 @@ function BookingSection({ children, business }: BookingSectionProps) {
                       selectedTime === item.time && "bg-primary text-white"
                     }`}
                     onClick={() => setSelectedTime(item.time)}
-                    disabled={isBooked(item.time)}
+                    disabled={isBooked(item.time) || !isValidDate(bookedDate)}
                   >
                     {item.time}
                   </Button>
@@ -167,7 +177,7 @@ function BookingSection({ children, business }: BookingSectionProps) {
               <div className="flex gap-5 mt-2">
                 <Button
                   onClick={() => saveBooking()}
-                  disabled={!(selectedTime && bookedDate)}
+                  disabled={!(selectedTime && bookedDate && isValidDate(bookedDate))}
                 >
                   Book
                 </Button>
