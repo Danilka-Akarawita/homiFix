@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Sheet,
   SheetClose,
@@ -12,7 +12,6 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
 
 export type BusinessList = {
   id: number;
@@ -29,8 +28,6 @@ export type BusinessList = {
   email: string;
 };
 
-
-
 interface BookingSectionProps {
   children: ReactNode;
   business: BusinessList;
@@ -39,48 +36,61 @@ interface TimeSlot {
   time: string;
 }
 
-function BookingSection({ children,business }: BookingSectionProps) {
-  const [bookedDate, setDate] = React.useState<Date | undefined>(new Date());
-  const [timeSlot, setTimeSlot] = React.useState<TimeSlot[]>([]);
-  const [selectedTime, setSelectedTime] = React.useState<string>();
+interface BookingSlot {
+  date: Date; // Format: YYYY-MM-DD
+  time: string;
+  bookingStatus?: string; // Add other properties if needed
+}
 
-  const getTime = () => {
-    const timeList: TimeSlot[] = [];
+const generateTimeSlots = (): TimeSlot[] => {
+  const timeList: TimeSlot[] = [];
 
-    for (let i = 10; i <= 12; i++) {
-      timeList.push({
-        time: i + ":00 AM",
-      });
-      timeList.push({
-        time: i + ":30 AM",
-      });
+  for (let i = 10; i <= 12; i++) {
+    timeList.push({ time: `${i}:00 AM` });
+    timeList.push({ time: `${i}:30 AM` });
+  }
+
+  for (let i = 1; i <= 6; i++) {
+    timeList.push({ time: `${i}:00 PM` });
+    timeList.push({ time: `${i}:30 PM` });
+  }
+
+  return timeList;
+};
+
+function BookingSection({ children, business }: BookingSectionProps) {
+  const [bookedDate, setDate] = useState<Date | undefined>(new Date());
+  const [timeSlot] = useState<TimeSlot[]>(generateTimeSlots());
+  const [selectedTime, setSelectedTime] = useState<string>();
+  const [bookedTimeSlot, setBookedTimeSlot] = useState<BookingSlot[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const fetchBookingTimeSlots = async () => {
+    try {
+      const response = await fetch(`/api/bookings/${business.id}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      setBookedTimeSlot(data);
+      console.log("booking ", data);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
     }
-
-    for (let i = 1; i <= 6; i++) {
-      timeList.push({
-        time: i + ":00 PM",
-      });
-      timeList.push({
-        time: i + ":30 PM",
-      });
-    }
-    setTimeSlot(timeList);
-    console.log("time: ", timeList);
   };
 
   useEffect(() => {
-    getTime();
-    
-  }, []);
+    fetchBookingTimeSlots();
+  }, [business.id, !isOpen]);
 
-  const saveBooking =  async () =>  {
+  const saveBooking = async () => {
     const objBooked = {
-      "username": business.contactPerson,
-      "userEmail": business.email,
-      "businessId": business.id,
-      "businessStatus": "booked",
-      "date": bookedDate,
-      "time": selectedTime
+      username: business.contactPerson,
+      userEmail: business.email,
+      businessId: business.id,
+      businessStatus: "booked",
+      date: bookedDate?.toISOString().slice(0, 10), // Format: YYYY-MM-DD
+      time: selectedTime,
     };
 
     const response = await fetch(`/api/bookings`, {
@@ -92,22 +102,37 @@ function BookingSection({ children,business }: BookingSectionProps) {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to create expense");
+      throw new Error("Failed to create booking");
     }
-    
 
-    toast("booking  Created!");
+    toast("New booking Created!");
+    setSelectedTime(undefined);
+    setDate(undefined);
   };
 
+  const isBooked = (time: string) => {
+    const selectedDateStr = bookedDate?.toISOString().slice(0, 10); // Format: YYYY-MM-DD
 
+    const isSlotBooked = !!bookedTimeSlot.find((item) => {
+      const itemDateStr = new Date(item.date).toISOString().slice(0, 10); // Convert item.date to Date object
+
+      return itemDateStr === selectedDateStr && item.time === time;
+    });
+
+    console.log("Is booked:", isSlotBooked);
+    return isSlotBooked;
+  };
+  const handleSheetOpenChange = (open: boolean) => {
+    setIsOpen(open);
+  };
 
   return (
     <div>
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={handleSheetOpenChange}>
         <SheetTrigger asChild>{children}</SheetTrigger>
         <SheetContent className="overflow-auto">
           <SheetHeader>
-            <SheetTitle>book on a Service </SheetTitle>
+            <SheetTitle>Book a Service</SheetTitle>
             <SheetDescription>
               Select Date & Time to book the service
               <div className="flex flex-col gap-5 items-baseline">
@@ -126,9 +151,10 @@ function BookingSection({ children,business }: BookingSectionProps) {
                     key={index}
                     variant="outline"
                     className={`border rounded-full px-2 p-2 hover:bg-primary hover:text-white ${
-                      selectedTime == item.time && "bg-primary text-white"
+                      selectedTime === item.time && "bg-primary text-white"
                     }`}
                     onClick={() => setSelectedTime(item.time)}
+                    disabled={isBooked(item.time)}
                   >
                     {item.time}
                   </Button>
@@ -138,7 +164,7 @@ function BookingSection({ children,business }: BookingSectionProps) {
           </SheetHeader>
           <SheetFooter>
             <SheetClose asChild>
-              <div className=" flex gap-5 mt-2">
+              <div className="flex gap-5 mt-2">
                 <Button
                   onClick={() => saveBooking()}
                   disabled={!(selectedTime && bookedDate)}
