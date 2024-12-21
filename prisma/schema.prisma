@@ -35,4 +35,5 @@ model Booking {
   businessListId Int
   businessList   BusinessList @relation(fields: [businessListId], references: [id])
   bookingStatus  String
+  createdBy      String
 }

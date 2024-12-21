@@ -12,6 +12,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 
 export type BusinessList = {
   id: number;
@@ -86,12 +87,14 @@ function BookingSection({ children, business }: BookingSectionProps) {
   const saveBooking = async () => {
     const objBooked = {
       username: business.contactPerson,
-      userEmail: business.email,
+      userEmail: business.email.trim(),
       businessId: business.id,
       businessStatus: "booked",
       date: bookedDate?.toISOString().slice(0, 10), // Format: YYYY-MM-DD
       time: selectedTime,
     };
+
+    console.log("ogj: ", objBooked);
 
     const response = await fetch(`/api/bookings`, {
       method: "POST",
@@ -113,16 +116,15 @@ function BookingSection({ children, business }: BookingSectionProps) {
   const isValidDate = (date: Date | undefined): boolean => {
     if (!date) return false;
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set today's time to midnight for comparison
-    return date >= today; // Date must be today or in the future
+    today.setHours(0, 0, 0, 0); 
+    return date >= today; 
   };
 
   const isBooked = (time: string) => {
     const selectedDateStr = bookedDate?.toISOString().slice(0, 10); // Format: YYYY-MM-DD
 
     const isSlotBooked = !!bookedTimeSlot.find((item) => {
-      const itemDateStr = new Date(item.date).toISOString().slice(0, 10); // Convert item.date to Date object
-
+      const itemDateStr = new Date(item.date).toISOString().slice(0, 10); 
       return itemDateStr === selectedDateStr && item.time === time;
     });
 
@@ -151,7 +153,9 @@ function BookingSection({ children, business }: BookingSectionProps) {
                   className="rounded-md border"
                 />
                 {!isValidDate(bookedDate) && (
-                  <p className="text-red-500">Booking date must be today or in the future.</p>
+                  <p className="text-red-500">
+                    Booking date must be today or in the future.
+                  </p>
                 )}
               </div>
               <h2 className="font-bold m-3">Select Time</h2>
@@ -177,7 +181,9 @@ function BookingSection({ children, business }: BookingSectionProps) {
               <div className="flex gap-5 mt-2">
                 <Button
                   onClick={() => saveBooking()}
-                  disabled={!(selectedTime && bookedDate && isValidDate(bookedDate))}
+                  disabled={
+                    !(selectedTime && bookedDate && isValidDate(bookedDate))
+                  }
                 >
                   Book
                 </Button>
