@@ -54,3 +54,32 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json(booking, { status: 201 });
 }
+
+export async function GET(request: NextRequest) {
+  const { userId } = await auth();
+
+  console.log("Fetching bookings for user-id:", userId);
+
+  if (userId) {
+    try {
+      const booking = await prisma.booking.findMany({
+        where: {
+          createdBy: userId,
+        },
+        include: {
+          businessList: true, 
+        },
+        
+      });
+
+      return NextResponse.json(booking, { status: 200 });
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 }
+      );
+    }
+  }
+}
