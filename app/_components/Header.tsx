@@ -19,10 +19,16 @@ const Header: React.FC = () => {
             Home
           </Link>
           <Link
-            href="/"
+            href="/details/1"
             className="hover:scale-105 hover:text-primary cursor-pointer"
           >
             Services
+          </Link>
+          <Link
+            href="/mybookings"
+            className="hover:scale-105 hover:text-primary cursor-pointer"
+          >
+            My Bookings
           </Link>
           <Link
             href="/"

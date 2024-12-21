@@ -2,12 +2,13 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@clerk/nextjs/server";
+import { isBefore, parseISO } from "date-fns";
 
 const schema = z.object({
   username: z.string().nonempty("Username is required"),
   userEmail: z.string().email("Invalid email address"),
   businessId: z.number().int("Business ID must be an integer"),
-  businessStatus: z.enum(["booked", "pending", "completed"], {
+  businessStatus: z.enum(["booked", "completed"], {
     errorMap: () => ({
       message: "Status must be one of: booked, pending, completed",
     }),
@@ -62,17 +63,30 @@ export async function GET(request: NextRequest) {
 
   if (userId) {
     try {
-      const booking = await prisma.booking.findMany({
+      const bookings = await prisma.booking.findMany({
         where: {
           createdBy: userId,
         },
         include: {
-          businessList: true, 
+          businessList: true,
         },
-        
       });
 
-      return NextResponse.json(booking, { status: 200 });
+      const updatedBookings = bookings.map((booking) => {
+        const today = new Date();
+        const bookingDate = parseISO(booking.date.toISOString());
+
+        return {
+          ...booking,
+          bookingStatus:
+            isBefore(bookingDate, today) ||
+            bookingDate.toDateString() === today.toDateString()
+              ? "completed"
+              : "booked",
+        };
+      });
+
+      return NextResponse.json(updatedBookings, { status: 200 });
     } catch (error) {
       console.error("Error fetching bookings:", error);
 
@@ -82,4 +96,6 @@ export async function GET(request: NextRequest) {
       );
     }
   }
+
+  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
