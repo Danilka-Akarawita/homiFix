@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export type BusinessList = {
   id: number;
@@ -56,7 +57,7 @@ function BussinessList({ businessList, title }: BusinessListProps) {
                   <h2 className="font-bold text-lg">{business.name}</h2>
                   <h2 className="text-primary">{business.contactPerson}</h2>
                   <h2 className="text-gray-500 text-sm">{business.address}</h2>
-                  <Button className="rounded-lg mt-3">Book Now</Button>
+                  <Button className="rounded-lg mt-3"><Link href={`/details/${business.id}`}>Book Now</Link></Button>
                 </div>
               </div>
             ))}
