@@ -12,7 +12,6 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useUser } from "@clerk/nextjs";
 
 export type BusinessList = {
   id: number;

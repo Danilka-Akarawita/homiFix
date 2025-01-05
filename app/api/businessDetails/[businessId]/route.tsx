@@ -1,9 +1,10 @@
 import prisma from "@/prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import {  NextRequest, NextResponse } from "next/server";
 
 type Params = Promise<{ businessId: string }>;
 export async function GET(
   request: NextRequest,
+  
   { params }: { params: Params }
 ) {
   const { businessId } = await params;

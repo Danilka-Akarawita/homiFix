@@ -1,12 +1,13 @@
 "use client";
 import BussinessList from "@/app/_components/BussinessList";
 import React, { useEffect, useState } from "react";
+
 type Params = {
   catergory: string;
 };
 
 interface BusinessByCategoryProps {
-  params: Params;
+  params: Promise<Params>; 
 }
 
 function BusinessByCatergory({ params }: BusinessByCategoryProps) {
@@ -14,7 +15,7 @@ function BusinessByCatergory({ params }: BusinessByCategoryProps) {
   const [categoryName, setCategoryName] = useState("");
 
   const fetchBusinessList = async () => {
-    var categoryParams = await params;
+    const categoryParams = await params;
     setCategoryName(categoryParams.catergory);
 
     try {

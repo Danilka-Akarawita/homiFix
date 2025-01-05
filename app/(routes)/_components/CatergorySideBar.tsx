@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { List } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 export type Catergory = {

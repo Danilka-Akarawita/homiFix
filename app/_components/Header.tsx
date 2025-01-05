@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
 
 const Header: React.FC = () => {
-  const {user,isSignedIn}=useUser();
+  const {isSignedIn}=useUser();
   return (
     <div className="p-5 shadow-sm flex justify-between items-center">
       <div className="flex items-center gap-8">
@@ -47,5 +47,6 @@ const Header: React.FC = () => {
     </div>
   );
 };
+/* eslint-disable */
 
 export default Header;

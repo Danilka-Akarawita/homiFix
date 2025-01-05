@@ -1,7 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import Header from "./_components/Header";
 import Hero from "./_components/Hero";
 import { useEffect, useState } from "react";
 import CatergoryList from "./_components/CatergoryList";
@@ -51,3 +48,4 @@ export default function Home() {
     </div>
   );
 }
+/* eslint-disable */

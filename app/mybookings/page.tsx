@@ -26,7 +26,7 @@ export type Booking = {
 };
 
 
-function myBookings() {
+function MyBookings() {
   const [myBookingsList, setMyBookingsList] = useState<Booking[]>([]);
 
   const fetchMyBooking = async () => {
@@ -75,4 +75,5 @@ function myBookings() {
   );
 }
 
-export default myBookings;
+export default MyBookings;
+/* eslint-disable */

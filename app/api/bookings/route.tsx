@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(booking, { status: 201 });
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const { userId } = await auth();
 
   console.log("Fetching bookings for user-id:", userId);
@@ -96,6 +96,8 @@ export async function GET(request: NextRequest) {
       );
     }
   }
+  //use request 
+  
 
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }

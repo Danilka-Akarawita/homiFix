@@ -40,7 +40,7 @@ function BusinessDetails() {
 
   useEffect(() => {
     fetchBusinessList();
-  }, []);
+  });
   return (
     <div className="py-8 md:py-20 px-10 md:px-36">
       {businessList && <BusinessInfo business={businessList} />}

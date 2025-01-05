@@ -1,6 +1,5 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
 type Params = Promise<{ id: string }>;
 

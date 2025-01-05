@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Notebook, NotebookPen } from "lucide-react";
+import { NotebookPen } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,8 +40,10 @@ function SuggestedBusinessLists({ business }: BusinessListProps) {
   };
 
   useEffect(() => {
-    business && fetchBusinessList();
-    console.log("Similar:", SimilarBusinessList);
+    if (business) {
+      fetchBusinessList();
+    }
+    // console.log("Similar:", SimilarBusinessList);
   }, [business]);
   return (
     <div className=" md:pl-10 ">
